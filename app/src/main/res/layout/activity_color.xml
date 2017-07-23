@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/colorLinearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="commaciejprogramuje.facebook.colorpalette.ColorActivity">
+
+    <TextView
+        style="@style/LabelStyle"
+        android:text="@string/red" />
+
+    <SeekBar
+        android:id="@+id/redSeekBar"
+        style="@style/ColorSeekBarStyle" />
+
+    <TextView
+        style="@style/LabelStyle"
+        android:text="@string/green" />
+
+    <SeekBar
+        android:id="@+id/greenSeekBar"
+        style="@style/ColorSeekBarStyle" />
+
+    <TextView
+        style="@style/LabelStyle"
+        android:text="@string/blue" />
+
+    <SeekBar
+        android:id="@+id/blueSeekBar"
+        style="@style/ColorSeekBarStyle" />
+
+    <Button
+        android:id="@+id/generateButton"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/generate" />
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="@string/save" />
+</LinearLayout>
