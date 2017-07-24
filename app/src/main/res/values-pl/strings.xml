@@ -8,4 +8,5 @@
     <string name="green">Zielony</string>
     <string name="red">Czerwony</string>
     <string name="save">Zapisz</string>
+    <string name="new_color_created">Utworzono nowy kolor: %s</string>
 </resources>

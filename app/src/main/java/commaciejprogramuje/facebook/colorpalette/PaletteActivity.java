@@ -7,13 +7,14 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class PaletteActivity extends AppCompatActivity {
 
-    private static final String SIMPLE_NAME = PaletteActivity.class.getSimpleName();
+    public static final int REQUEST_CODE_CREATE = 1;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,48 +23,13 @@ public class PaletteActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-
                 addColor();
             }
         });
-
-        Log.d(SIMPLE_NAME, "onCreate");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d(SIMPLE_NAME, "onDestroy");
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d(SIMPLE_NAME, "onStart");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d(SIMPLE_NAME, "onStop");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(SIMPLE_NAME, "onResume");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d(SIMPLE_NAME, "onPause");
     }
 
     @Override
@@ -93,6 +59,17 @@ public class PaletteActivity extends AppCompatActivity {
 
     private void addColor() {
         Intent intent = new Intent(PaletteActivity.this, ColorActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_CODE_CREATE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        String colorInHex = data.getStringExtra(ColorActivity.COLOR_IN_HEX);
+
+        if (requestCode == REQUEST_CODE_CREATE && resultCode == RESULT_OK) {
+            Snackbar.make(fab, getString(R.string.new_color_created, colorInHex), Snackbar.LENGTH_LONG)
+                    .show();
+        }
     }
 }

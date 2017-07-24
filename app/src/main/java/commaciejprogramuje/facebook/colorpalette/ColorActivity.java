@@ -1,13 +1,16 @@
 package commaciejprogramuje.facebook.colorpalette;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.SeekBar;
 
 import java.util.Random;
@@ -21,6 +24,7 @@ public class ColorActivity extends AppCompatActivity implements SeekBar.OnSeekBa
     public static final String RED = "red";
     public static final String GREEN = "green";
     public static final String BLUE = "blue";
+    public static final String COLOR_IN_HEX = "color in hex";
     @Bind(R.id.redSeekBar)
     SeekBar redSeekBar;
     @Bind(R.id.greenSeekBar)
@@ -32,7 +36,7 @@ public class ColorActivity extends AppCompatActivity implements SeekBar.OnSeekBa
     @Bind(R.id.saveButton)
     Button saveButton;
     @Bind(R.id.colorLinearLayout)
-    LinearLayout colorLinearLayout;
+    ScrollView colorLinearLayout;
 
     Random random = new Random();
     int red;
@@ -83,7 +87,10 @@ public class ColorActivity extends AppCompatActivity implements SeekBar.OnSeekBa
 
     @OnClick(R.id.saveButton)
     public void save() {
-
+        Intent data = new Intent();
+        data.putExtra(COLOR_IN_HEX, String.format("#%02X%02X%02X", red, green, blue));
+        setResult(RESULT_OK, data);
+        finish();
     }
 
     @Override

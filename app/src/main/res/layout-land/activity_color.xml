@@ -15,7 +15,7 @@
         <TextView
             style="@style/LabelStyle"
             android:text="@string/red"
-            android:layout_marginTop="20dp"/>
+            android:layout_marginTop="10dp"/>
 
         <SeekBar
             android:id="@+id/redSeekBar"
