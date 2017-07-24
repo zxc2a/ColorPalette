@@ -87,8 +87,9 @@ public class ColorActivity extends AppCompatActivity implements SeekBar.OnSeekBa
 
     @OnClick(R.id.saveButton)
     public void save() {
+        String hex = "#" + Integer.toHexString(red) + Integer.toHexString(green) + Integer.toHexString(blue);
         Intent data = new Intent();
-        data.putExtra(COLOR_IN_HEX, String.format("#%02X%02X%02X", red, green, blue));
+        data.putExtra(COLOR_IN_HEX, hex);
         setResult(RESULT_OK, data);
         finish();
     }
