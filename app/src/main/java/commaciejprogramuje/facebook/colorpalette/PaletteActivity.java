@@ -5,21 +5,33 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-public class PaletteActivity extends AppCompatActivity {
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
+public class PaletteActivity extends AppCompatActivity {
     public static final int REQUEST_CODE_CREATE = 1;
-    private FloatingActionButton fab;
+
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+    @Bind(R.id.colorRecyclerView)
+    RecyclerView colorRecyclerView;
+    @Bind(R.id.fab)
+    FloatingActionButton fab;
+
+    private ColorAdapter colorAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_palette);
+        ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -30,6 +42,10 @@ public class PaletteActivity extends AppCompatActivity {
                 addColor();
             }
         });
+
+        colorAdapter = new ColorAdapter(getLayoutInflater());
+        colorRecyclerView.setLayoutManager(new LinearLayoutManager(PaletteActivity.this));
+        colorRecyclerView.setAdapter(colorAdapter);
     }
 
     @Override
@@ -70,6 +86,7 @@ public class PaletteActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CODE_CREATE && resultCode == RESULT_OK) {
             Snackbar.make(fab, getString(R.string.new_color_created, colorInHex), Snackbar.LENGTH_LONG)
                     .show();
+            colorAdapter.addColor(colorInHex);
         }
     }
 }
