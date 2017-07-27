@@ -1,12 +1,15 @@
 package commaciejprogramuje.facebook.colorpalette;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,13 +19,27 @@ import java.util.List;
  */
 
 public class ColorAdapter extends RecyclerView.Adapter<ColorViewHolder> {
+    public static final String COLORS_KEY = "colors";
     private List<String> colors = new ArrayList<>();
     private final LayoutInflater layoutInflater;
+    private final SharedPreferences sharedPreferences;
 
     ColorClickedListener colorClickedListener;
 
-    public ColorAdapter(LayoutInflater layoutInflater) {
+    public ColorAdapter(LayoutInflater layoutInflater, SharedPreferences sharedPreferences) {
         this.layoutInflater = layoutInflater;
+        this.sharedPreferences = sharedPreferences;
+
+        try {
+            String colorsJson = sharedPreferences.getString(COLORS_KEY, "[]");
+            JSONArray jsonArray = new JSONArray(colorsJson);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                colors.add(i, jsonArray.getString(i));
+            }
+            notifyDataSetChanged();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -45,14 +62,31 @@ public class ColorAdapter extends RecyclerView.Adapter<ColorViewHolder> {
     public void addColor(String color) {
         colors.add(color);
         notifyItemInserted(colors.size() - 1);
+
+        storeInPreferences();
+    }
+
+    private void storeInPreferences() {
+        try {
+            JSONArray jsonArray = new JSONArray();
+            for (int i = 0; i < colors.size(); i++) {
+                jsonArray.put(i, colors.get(i));
+            }
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(COLORS_KEY, jsonArray.toString());
+            editor.apply();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public void remove(int position) {
         colors.remove(position);
+        storeInPreferences();
     }
 
     public void clicked(int position) {
-        if(colorClickedListener != null) {
+        if (colorClickedListener != null) {
             colorClickedListener.onColorClicked(colors.get(position));
         }
     }
@@ -61,6 +95,15 @@ public class ColorAdapter extends RecyclerView.Adapter<ColorViewHolder> {
         int indexOf = colors.indexOf(oldColor);
         colors.set(indexOf, colorInHex);
         notifyItemChanged(indexOf);
+        storeInPreferences();
+    }
+
+    public void clear() {
+        colors.clear();
+        notifyDataSetChanged();
+        sharedPreferences.edit()
+                .clear()
+                .apply();
     }
 
     public interface ColorClickedListener {
@@ -72,7 +115,7 @@ public class ColorAdapter extends RecyclerView.Adapter<ColorViewHolder> {
     }
 }
 
-class ColorViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+class ColorViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     private String color;
     private TextView textView;
     private final ColorAdapter colorAdapter;
