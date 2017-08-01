@@ -91,9 +91,9 @@ public class ColorActivity extends AppCompatActivity implements SeekBar.OnSeekBa
 
     @OnClick(R.id.generateButton)
     public void generate() {
-        red = random.nextInt(255);
-        green = random.nextInt(255);
-        blue = random.nextInt(255);
+        red = random.nextInt(254);
+        green = random.nextInt(254);
+        blue = random.nextInt(254);
 
         updateSeekBars();
         updateBackgrounColor();

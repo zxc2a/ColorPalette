@@ -14,19 +14,16 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by m.szymczyk on 2017-07-25.
- */
 
-public class ColorAdapter extends RecyclerView.Adapter<ColorViewHolder> {
-    public static final String COLORS_KEY = "colors";
+class ColorAdapter extends RecyclerView.Adapter<ColorViewHolder> {
+    private static final String COLORS_KEY = "colors";
     private List<String> colors = new ArrayList<>();
     private final LayoutInflater layoutInflater;
     private final SharedPreferences sharedPreferences;
 
-    ColorClickedListener colorClickedListener;
+    private ColorClickedListener colorClickedListener;
 
-    public ColorAdapter(LayoutInflater layoutInflater, SharedPreferences sharedPreferences) {
+    ColorAdapter(LayoutInflater layoutInflater, SharedPreferences sharedPreferences) {
         this.layoutInflater = layoutInflater;
         this.sharedPreferences = sharedPreferences;
 
@@ -59,7 +56,7 @@ public class ColorAdapter extends RecyclerView.Adapter<ColorViewHolder> {
         return colors.size();
     }
 
-    public int addColor(String color) {
+    int addColor(String color) {
         colors.add(color);
         int position = colors.size() - 1;
         notifyItemInserted(position);
@@ -81,25 +78,25 @@ public class ColorAdapter extends RecyclerView.Adapter<ColorViewHolder> {
         }
     }
 
-    public void remove(int position) {
+    void remove(int position) {
         colors.remove(position);
         storeInPreferences();
     }
 
-    public void clicked(int position) {
+    void clicked(int position) {
         if (colorClickedListener != null) {
             colorClickedListener.onColorClicked(colors.get(position));
         }
     }
 
-    public void replace(String oldColor, String colorInHex) {
+    void replace(String oldColor, String colorInHex) {
         int indexOf = colors.indexOf(oldColor);
         colors.set(indexOf, colorInHex);
         notifyItemChanged(indexOf);
         storeInPreferences();
     }
 
-    public void clear() {
+    void clear() {
         colors.clear();
         notifyDataSetChanged();
         sharedPreferences.edit()
@@ -107,22 +104,21 @@ public class ColorAdapter extends RecyclerView.Adapter<ColorViewHolder> {
                 .apply();
     }
 
-    public interface ColorClickedListener {
+    interface ColorClickedListener {
         void onColorClicked(String colorInHex);
     }
 
-    public void setColorClickedListener(ColorClickedListener colorClickedListener) {
+    void setColorClickedListener(ColorClickedListener colorClickedListener) {
         this.colorClickedListener = colorClickedListener;
     }
 }
 
 class ColorViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    private String color;
     private TextView textView;
     private final ColorAdapter colorAdapter;
 
 
-    public ColorViewHolder(View itemView, ColorAdapter colorAdapter) {
+    ColorViewHolder(View itemView, ColorAdapter colorAdapter) {
         super(itemView);
         textView = (TextView) itemView;
         textView.setOnClickListener(this);
@@ -130,15 +126,10 @@ class ColorViewHolder extends RecyclerView.ViewHolder implements View.OnClickLis
     }
 
     public void setColor(String color) {
-        this.color = color;
         textView.setText(color);
         int backgroundColor = Color.parseColor(color);
         textView.setBackgroundColor(backgroundColor);
         textView.setTextColor(PaletteActivity.getTextColorFromColor(backgroundColor));
-    }
-
-    public String getColor() {
-        return color;
     }
 
     @Override
