@@ -59,11 +59,12 @@ public class ColorAdapter extends RecyclerView.Adapter<ColorViewHolder> {
         return colors.size();
     }
 
-    public void addColor(String color) {
+    public int addColor(String color) {
         colors.add(color);
-        notifyItemInserted(colors.size() - 1);
-
+        int position = colors.size() - 1;
+        notifyItemInserted(position);
         storeInPreferences();
+        return position;
     }
 
     private void storeInPreferences() {
@@ -131,7 +132,9 @@ class ColorViewHolder extends RecyclerView.ViewHolder implements View.OnClickLis
     public void setColor(String color) {
         this.color = color;
         textView.setText(color);
-        textView.setBackgroundColor(Color.parseColor(color));
+        int backgroundColor = Color.parseColor(color);
+        textView.setBackgroundColor(backgroundColor);
+        textView.setTextColor(PaletteActivity.getTextColorFromColor(backgroundColor));
     }
 
     public String getColor() {

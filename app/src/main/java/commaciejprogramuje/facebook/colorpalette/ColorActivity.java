@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import java.util.Random;
 
@@ -37,6 +38,12 @@ public class ColorActivity extends AppCompatActivity implements SeekBar.OnSeekBa
     Button saveButton;
     @Bind(R.id.colorLinearLayout)
     ScrollView colorLinearLayout;
+    @Bind(R.id.redLabel)
+    TextView redLabel;
+    @Bind(R.id.greenLabel)
+    TextView greenLabel;
+    @Bind(R.id.blueLabel)
+    TextView blueLabel;
 
     Random random = new Random();
     int red;
@@ -60,7 +67,7 @@ public class ColorActivity extends AppCompatActivity implements SeekBar.OnSeekBa
 
         Intent intent = getIntent();
         oldColor = intent.getStringExtra(OLD_COLOR_KEY);
-        if(oldColor != null) {
+        if (oldColor != null) {
             int color = Color.parseColor(oldColor);
             red = Color.red(color);
             green = Color.green(color);
@@ -84,9 +91,9 @@ public class ColorActivity extends AppCompatActivity implements SeekBar.OnSeekBa
 
     @OnClick(R.id.generateButton)
     public void generate() {
-        red = random.nextInt(256);
-        green = random.nextInt(256);
-        blue = random.nextInt(256);
+        red = random.nextInt(255);
+        green = random.nextInt(255);
+        blue = random.nextInt(255);
 
         updateSeekBars();
         updateBackgrounColor();
@@ -101,6 +108,11 @@ public class ColorActivity extends AppCompatActivity implements SeekBar.OnSeekBa
     private void updateBackgrounColor() {
         int color = Color.rgb(red, green, blue);
         colorLinearLayout.setBackgroundColor(color);
+
+        int textColorFromColor = PaletteActivity.getTextColorFromColor(color);
+        redLabel.setTextColor(textColorFromColor);
+        greenLabel.setTextColor(textColorFromColor);
+        blueLabel.setTextColor(textColorFromColor);
     }
 
     @OnClick(R.id.saveButton)
@@ -109,7 +121,7 @@ public class ColorActivity extends AppCompatActivity implements SeekBar.OnSeekBa
         Intent data = new Intent();
         data.putExtra(COLOR_IN_HEX_KEY, hex);
 
-        if(oldColor != null) {
+        if (oldColor != null) {
             data.putExtra(OLD_COLOR_KEY, oldColor);
         }
 
